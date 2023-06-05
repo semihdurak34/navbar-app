@@ -1,38 +1,54 @@
-import React from "react";
-import "./Navbar.css"; // Navbar bileşenine özel CSS dosyası
+import React, { useState } from "react";
+import "./Navbar.css";
+const NavbarItem = ({ item }) => {
+  const [hovered, setHovered] = useState(false);
 
-const Navbar = ({ data }) => {
-  const renderButtons = (buttons) => {
-    return buttons.map((button) => {
-      const { label, url, children, css, functionType } = button;
-      const isParent = functionType === "parentButton";
-      const isChild = functionType === "childButton";
+  const handleMouseEnter = () => {
+    setHovered(true);
+  };
 
-      const isSubChild = children[1]?.functionType === "subChildButton";
-
-      console.log(isSubChild);
-
-      return (
-        <li
-          key={label}
-          className={`nav-item ${isParent ? "parent" : ""} ${
-            isChild ? "child" : ""
-          }`}
-        >
-          <a href={url} className={`nav-link ${css}`}>
-            {label}
-          </a>
-          {isParent && children && (
-            <ul className="dropdown-menu">{renderButtons(children)}</ul>
-          )}
-        </li>
-      );
-    });
+  const handleMouseLeave = () => {
+    setHovered(false);
   };
 
   return (
-    <nav className="navbar">
-      <ul className="nav-menu">{renderButtons(data)}</ul>
+    <li
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      className="relative drop"
+    >
+      <a
+        href={item.link}
+        className=" font-semibold mx-6 whitespace-nowrap"
+        aria-hidden="true"
+      >
+        {item.title}
+      </a>
+
+      {hovered && item.children && (
+        <ul
+          className=" absolute left p-2 bg-white shadow-lg rounded-lg mt-5"
+          onMouseEnter={handleMouseEnter}
+        >
+          {item.children.map((child) => (
+            <NavbarItem key={child.id} item={child} />
+          ))}
+        </ul>
+      )}
+    </li>
+  );
+};
+
+const Navbar = ({ data }) => {
+  return (
+    <nav className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500">
+      <div className="container mx-auto">
+        <ul className="flex justify-center py-4 ">
+          {data.map((item) => (
+            <NavbarItem key={item.id} item={item} />
+          ))}
+        </ul>
+      </div>
     </nav>
   );
 };
