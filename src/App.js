@@ -1,18 +1,14 @@
-import React ,{useState}from "react";
+import React from "react";
 
-import Navbar from "./Navbar";
-import data from "./FakeData";
+import Navbar from "./components/Navbar";
+
 
 
 const App = () => {
- /*  const [dataArray, setDataArray] = useState(data)
-  const data= ()=>{
-    dataArray();
-  } */
-
+ 
   return (
-    <div className="App">
-      <Navbar  data={data} color="blue"/>
+    <div className="app">
+      <Navbar/>
     </div>
   );
 };
